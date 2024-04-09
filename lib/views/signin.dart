@@ -1,9 +1,15 @@
+// ignore_for_file: camel_case_types, prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:insurance/views/custombutton.dart';
 import 'package:insurance/views/customtextfield.dart';
+import 'package:insurance/views/reset.dart';
 import 'package:insurance/views/signup.dart';
+import 'package:http/http.dart' as http;
 
 class signIn extends StatelessWidget {
   const signIn({super.key});
@@ -85,9 +91,14 @@ class signIn extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         width: MediaQuery.of(context).size.width,
-                        child: customButton(
-                          action: () => Get.toNamed("/Home"),
-                          buttonLabel: 'Log in',
+                        child: ElevatedButton(
+                          onPressed: () {
+                            signin();
+                            Get.toNamed("/Home");
+                          },
+                          child: const Text("LOGIN"),
+                          style: ElevatedButton.styleFrom(
+                              elevation: 10, padding: const EdgeInsets.all(15)),
                         ),
                       ),
                       const SizedBox(
@@ -102,7 +113,7 @@ class signIn extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => signUp()));
+                                      builder: (context) => Reset()));
                             },
                             child: const Text("Reset"),
                           )
@@ -135,5 +146,24 @@ class signIn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> signin() async {
+    http.Response response;
+
+    response = await http.get(
+      Uri.parse(
+          'https://sanerylgloann.co.ke/Ann_insurance/login.php?email=${emailController.text.trim()}&password=${passwordController.text.trim()}'),
+    );
+    if (response.statusCode == 200) {
+      var serverResponse = json.decode(response.body);
+      int loginServer = serverResponse['success'];
+      if (loginServer == 1) {
+        Get.offAndToNamed("/Home");
+      } else {
+        print("email or password is incorrect");
+        // Get.snackbar("Error", "An error occured $response.statusCode");
+      }
+    }
   }
 }

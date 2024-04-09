@@ -8,6 +8,11 @@ import 'package:insurance/views/signup.dart';
 
 void main() {
   runApp(GetMaterialApp(
+    routes: {
+      "/": (context) => signIn(),
+      "/SignUp": (context) => signUp(),
+      "/Home": (context) => Home(),
+    },
     initialRoute: "/",
     getPages: Routes.routes,
     debugShowCheckedModeBanner: false,

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +17,8 @@ HomeController homeController = Get.put(HomeController());
 var screens = [
   Dashboard(),
   Notifications(),
-  Profile(),
-  Settings(),
+  ProfilePage(),
+  SettingsPage(),
 ];
 
 class Home extends StatelessWidget {
@@ -27,6 +29,17 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Welcome to Better Insurance"),
+          backgroundColor: primaryColor,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.toNamed("/SignIn");
+                },
+                icon: Icon(Icons.logout))
+          ],
+        ),
         bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: primaryColor,
             color: primaryColor,

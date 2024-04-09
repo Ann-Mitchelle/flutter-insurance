@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors, must_be_immutable, camel_case_types, unused_import
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insurance/config/constants.dart';
@@ -6,6 +10,15 @@ import 'package:insurance/views/custombutton.dart';
 import 'package:insurance/views/customtextfield.dart';
 
 import 'package:insurance/views/home.dart';
+import 'package:insurance/views/signin.dart';
+import 'package:http/http.dart' as http;
+
+TextEditingController firstNameController = TextEditingController();
+TextEditingController lastNameController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController emailController = TextEditingController();
+TextEditingController phoneController = TextEditingController();
+TextEditingController confirmPasswordController = TextEditingController();
 
 class signUp extends StatelessWidget {
   SignUpController signupController = Get.put(SignUpController());
@@ -14,14 +27,16 @@ class signUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
-
     return Scaffold(
+        appBar: AppBar(
+          //backgroundColor: primaryColor.withOpacity(0.8),
+          leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () => Get.toNamed("/homepage")),
+          automaticallyImplyLeading: true,
+        ),
         body: Container(
             constraints: BoxConstraints.expand(),
             decoration: const BoxDecoration(
@@ -84,6 +99,15 @@ class signUp extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: customTextField(
+                              userFieldController: phoneController,
+                              icon: Icons.phone,
+                              hideText: false,
+                              isPassword: false,
+                              hint: "Phone",
+                            )),
+                        SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: customTextField(
                             userFieldController: emailController,
@@ -94,16 +118,6 @@ class signUp extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: customTextField(
-                            userFieldController: phoneController,
-                            icon: Icons.phone,
-                            hideText: false,
-                            isPassword: false,
-                            hint: "Phone",
-                          ),
-                        ),
                         const SizedBox(height: 10),
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -129,9 +143,14 @@ class signUp extends StatelessWidget {
                         const SizedBox(height: 15),
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          child: customButton(
-                            action: () {
-                              signupController.firstName.value =
+                          child: ElevatedButton(
+                              onPressed: () {
+                                signup();
+                                Get.toNamed("/");
+                              },
+                              child: Text("Sign Up")),
+
+                          /*    signupController.firstName.value =
                                   firstNameController.text;
                               signupController.secondName.value =
                                   lastNameController.text;
@@ -139,10 +158,24 @@ class signUp extends StatelessWidget {
                                   emailController.text;
                               signupController.phoneNumber.value =
                                   phoneController.text;
-                              Get.toNamed("/");
-                            },
-                            buttonLabel: 'Sign up',
-                          ),
+                              // Get.toNamed("/");
+                              */
+                          //print('Method called');
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already have an account?"),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => signIn()));
+                              },
+                              child: const Text("Login"),
+                            )
+                          ],
                         ),
                       ],
                     ),
@@ -150,5 +183,29 @@ class signUp extends StatelessWidget {
                 ],
               )),
             )));
+  }
+
+  Future<void> signup() async {
+    http.Response response;
+    var body = {
+      'firstName': firstNameController.text.trim(),
+      'lastName': lastNameController.text.trim(),
+      'email': emailController.text.trim(),
+      'phoneNumber': phoneController.text.trim(),
+      'password': passwordController.text.trim(),
+    };
+    response = await http.post(
+        Uri.parse('https://sanerylgloann.co.ke/myInsurance/signup.php'),
+        body: body);
+    if (response.statusCode == 200) {
+      var serverResponse = json.decode(response.body);
+      int loginServer = serverResponse['success'];
+      if (loginServer == 1) {
+        Get.offAndToNamed("/");
+      } else {
+        Get.toNamed("/");
+        // Get.snackbar("Error", "An error occured $response.statusCode");
+      }
+    }
   }
 }

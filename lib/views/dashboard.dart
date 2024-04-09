@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -23,7 +25,7 @@ class Dashboard extends StatelessWidget {
           children: [
             CListView(
               label: "Enrollment Status",
-              action: () => Get.toNamed("/Enrollment"),
+              action: () => Get.toNamed("/Enroll"),
             ),
             CListView(
               label: "Package Details",

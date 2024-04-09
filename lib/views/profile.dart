@@ -1,63 +1,111 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:insurance/config/constants.dart';
-import 'package:insurance/controllers/signupcontroller.dart';
-import 'package:insurance/views/custombutton.dart';
+import 'package:insurance/views/customeProfile.dart';
 import 'package:insurance/views/customtext.dart';
 
-class Profile extends StatelessWidget {
-  Profile({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final signUpController = Get.find<SignUpController>();
-    SignUpController signupController = Get.put(SignUpController());
     return Scaffold(
-        appBar: AppBar(
-          actions: [],
-          backgroundColor: primaryColor,
-          title: customText(label: "Hello ${signUpController.firstName.value}"),
-        ),
-        body: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(25.0),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/profile.jpg"),
-                          fit: BoxFit.cover)),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       Navigator.pushNamed(context,'/home');
+                  //     },
+                  //     child: Icon(Icons.arrow_back)),
+                  // Icon(Icons.settings),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('/images/woman.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    //border:Border.all(),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                        color: Colors.red.withOpacity(0.3),
+                      )
+                    ]),
+                //child: Image.asset("/images/woman.png")),
+              ),
+              customText(label: "Ann Mitchele"),
+              customText(label: "mishellann@gmail.com"),
+              SizedBox(
+                height: 20,
+              ),
+              //customButton(buttonLabel: "Edit Profile",),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )),
+                  child: Text("Edit Profile")),
+              SizedBox(
+                height: 20,
+              ),
+
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  customText(
+                    label: "Account",
+                    fontSize: 20,
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  children: [
+                    CustomProfile(
+                        myIcon: Icon(Icons.person), myText: "My Account"),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomProfile(
+                        myIcon: Icon(Icons.notification_add),
+                        myText: "Notifications"),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomProfile(
+                        myIcon: Icon(Icons.privacy_tip), myText: "Privacy"),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomProfile(
+                        myIcon: Icon(Icons.account_balance_rounded),
+                        myText: "About"),
+                  ],
                 ),
-                Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 15),
-                    height: 300,
-                    width: 300,
-                    color: Colors.white.withOpacity(0.4),
-                    child: Column(children: [
-                      Text(signUpController.firstName.value),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(signUpController.secondName.value),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(signUpController.email.value),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(signUpController.phoneNumber.value),
-                    ])),
-                customButton(
-                    buttonLabel: "Edit Profile",
-                    action: () => Get.toNamed("/EditProfile")),
-              ]),
-        ));
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
