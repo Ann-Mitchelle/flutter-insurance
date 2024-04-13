@@ -11,14 +11,15 @@ import 'package:insurance/views/reset.dart';
 import 'package:insurance/views/signup.dart';
 import 'package:http/http.dart' as http;
 
+TextEditingController userNameController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController emailController = TextEditingController();
+
 class signIn extends StatelessWidget {
   const signIn({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController userNameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -156,6 +157,8 @@ class signIn extends StatelessWidget {
           'https://sanerylgloann.co.ke/Ann_insurance/login.php?email=${emailController.text.trim()}&password=${passwordController.text.trim()}'),
     );
     if (response.statusCode == 200) {
+      debugPrint(response.body);
+      debugPrint("Ok!");
       var serverResponse = json.decode(response.body);
       int loginServer = serverResponse['success'];
       if (loginServer == 1) {

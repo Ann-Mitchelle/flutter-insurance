@@ -47,7 +47,13 @@ class ProfilePage extends StatelessWidget {
                     ]),
                 //child: Image.asset("/images/woman.png")),
               ),
-              customText(label: "Ann Mitchele"),
+              GestureDetector(
+                child: customText(label: "User details"),
+                onTap: () {
+                  Navigator.pushNamed(context, '/home');
+                },
+              ),
+
               customText(label: "mishellann@gmail.com"),
               SizedBox(
                 height: 20,

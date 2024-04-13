@@ -13,28 +13,25 @@ import 'package:insurance/views/home.dart';
 import 'package:insurance/views/signin.dart';
 import 'package:http/http.dart' as http;
 
-TextEditingController firstNameController = TextEditingController();
-TextEditingController lastNameController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-TextEditingController emailController = TextEditingController();
-TextEditingController phoneController = TextEditingController();
-TextEditingController confirmPasswordController = TextEditingController();
-
 class signUp extends StatelessWidget {
-  SignUpController signupController = Get.put(SignUpController());
-
+  //SignUpController signupController = Get.put(SignUpController());
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   signUp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          //backgroundColor: primaryColor.withOpacity(0.8),
           leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
               ),
-              onPressed: () => Get.toNamed("/homepage")),
+              onPressed: () async => await Get.toNamed("/homepage")),
           automaticallyImplyLeading: true,
         ),
         body: Container(
@@ -61,7 +58,7 @@ class signUp extends StatelessWidget {
                     height: 30,
                   ),
                   const Text(
-                    "W Fill in the form to sign up",
+                    " Fill in the form to sign up",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: appBlackColor,
@@ -118,7 +115,6 @@ class signUp extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const SizedBox(height: 10),
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: customTextField(
@@ -144,13 +140,25 @@ class signUp extends StatelessWidget {
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton(
-                              onPressed: () {
-                                signup();
+                              onPressed: () async {
+                                await signup();
                                 Get.toNamed("/");
+                                print("Jesus is coming...");
                               },
                               child: Text("Sign Up")),
+                          /*final buttonStyle styling =  ElevatedButton.styleFrom(
+                            primary: Colors.blue, // Background color
+                            onPrimary: Colors.white, // Text color
+                            elevation: 5, // Elevation
+                            minimumSize: Size(200, 50), // Minimum size
+                            shape: RoundedRectangleBorder(
+                              // Button border
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );*/
+                        ),
 
-                          /*    signupController.firstName.value =
+                        /*    signupController.firstName.value =
                                   firstNameController.text;
                               signupController.secondName.value =
                                   lastNameController.text;
@@ -160,8 +168,8 @@ class signUp extends StatelessWidget {
                                   phoneController.text;
                               // Get.toNamed("/");
                               */
-                          //print('Method called');
-                        ),
+                        //print('Method called');
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -186,25 +194,29 @@ class signUp extends StatelessWidget {
   }
 
   Future<void> signup() async {
-    http.Response response;
     var body = {
-      'firstName': firstNameController.text.trim(),
-      'lastName': lastNameController.text.trim(),
+      'firstname': firstNameController.text.trim(),
+      'lastname': lastNameController.text.trim(),
+      'phonenumber': phoneController.text.trim(),
       'email': emailController.text.trim(),
-      'phoneNumber': phoneController.text.trim(),
       'password': passwordController.text.trim(),
     };
-    response = await http.post(
-        Uri.parse('https://sanerylgloann.co.ke/myInsurance/signup.php'),
-        body: body);
+
+    final response = await http.post(
+      Uri.parse('https://sanerylgloann.co.ke/myInsurance/signup.php'),
+      body: body,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    //print(response.body);
     if (response.statusCode == 200) {
       var serverResponse = json.decode(response.body);
-      int loginServer = serverResponse['success'];
-      if (loginServer == 1) {
-        Get.offAndToNamed("/");
+      int signedUp = serverResponse['success'];
+      if (signedUp == 1) {
+        Get.offAndToNamed("/homepage");
       } else {
-        Get.toNamed("/");
-        // Get.snackbar("Error", "An error occured $response.statusCode");
+        print("Hello");
       }
     }
   }
