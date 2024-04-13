@@ -3,34 +3,35 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:insurance/views/custombutton.dart';
+import 'package:get/get.dart';
+import 'package:insurance/controllers/user_controller.dart';
+import 'package:insurance/models/user.dart';
 import 'package:insurance/views/customtextfield.dart';
 import 'package:insurance/views/reset.dart';
 import 'package:insurance/views/signup.dart';
 import 'package:http/http.dart' as http;
-
-TextEditingController userNameController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-TextEditingController emailController = TextEditingController();
 
 class signIn extends StatelessWidget {
   const signIn({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/backgroundcopy.jpg"),
-                fit: BoxFit.cover)),
+          image: AssetImage("assets/images/backgroundcopy.jpg"),
+          fit: BoxFit.cover,
+        )),
         child: SafeArea(
           minimum: EdgeInsets.all(20),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
@@ -93,13 +94,16 @@ class signIn extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
-                          onPressed: () {
-                            signin();
-                            Get.toNamed("/Home");
+                          onPressed: () async {
+                            debugPrint("Here");
+                            await signin(
+                              emailController.text,
+                              passwordController.text,
+                            );
                           },
-                          child: const Text("LOGIN"),
                           style: ElevatedButton.styleFrom(
                               elevation: 10, padding: const EdgeInsets.all(15)),
+                          child: const Text("Login"),
                         ),
                       ),
                       const SizedBox(
@@ -149,24 +153,39 @@ class signIn extends StatelessWidget {
     );
   }
 
-  Future<void> signin() async {
-    http.Response response;
+  Future<void> signin(String email, String password) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://sanerylgloann.co.ke/myInsurance/login.php?email=${email.trim()}&password=${password.trim()}',
+        ),
+      );
+      if (response.statusCode == 200) {
+        var serverResponse = json.decode(response.body);
+        int loginServer = serverResponse['success'];
+        if (loginServer == 1) {
+          Get.snackbar(
+            "Success",
+            "You were successfully authenticated",
+          );
 
-    response = await http.get(
-      Uri.parse(
-          'https://sanerylgloann.co.ke/Ann_insurance/login.php?email=${emailController.text.trim()}&password=${passwordController.text.trim()}'),
-    );
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      debugPrint("Ok!");
-      var serverResponse = json.decode(response.body);
-      int loginServer = serverResponse['success'];
-      if (loginServer == 1) {
-        Get.offAndToNamed("/Home");
-      } else {
-        print("email or password is incorrect");
-        // Get.snackbar("Error", "An error occured $response.statusCode");
+          final userController = Get.find<UserController>();
+          userController.user.value =
+              User.fromJson(serverResponse["userdata"][0]);
+          Get.offAndToNamed("/Home");
+        } else {
+          Get.snackbar(
+            "Authentication Error",
+            "Please check your email and password and try again",
+          );
+          // Get.snackbar("Error", "An error occured $response.statusCode");
+        }
       }
+    } catch (e) {
+      Get.snackbar(
+        "Exception",
+        "Exception: ${e.toString()}",
+      );
     }
   }
 }
