@@ -1,115 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:insurance/config/constants.dart';
-import 'package:insurance/views/customeProfile.dart';
-import 'package:insurance/views/customtext.dart';
+import 'package:get/get.dart';
+import 'package:insurance/controllers/user_controller.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userController = Get.find<UserController>();
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // GestureDetector(
-                  //     onTap: () {
-                  //       Navigator.pushNamed(context,'/home');
-                  //     },
-                  //     child: Icon(Icons.arrow_back)),
-                  // Icon(Icons.settings),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('/images/woman.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    //border:Border.all(),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                        color: Colors.red.withOpacity(0.3),
-                      )
-                    ]),
-                //child: Image.asset("/images/woman.png")),
-              ),
-              GestureDetector(
-                child: customText(label: "User details"),
-                onTap: () {
-                  Navigator.pushNamed(context, '/home');
-                },
-              ),
-
-              customText(label: "mishellann@gmail.com"),
-              SizedBox(
-                height: 20,
-              ),
-              //customButton(buttonLabel: "Edit Profile",),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
-                  child: Text("Edit Profile")),
-              SizedBox(
-                height: 20,
-              ),
-
-              SizedBox(
-                height: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  customText(
-                    label: "Account",
-                    fontSize: 20,
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  children: [
-                    CustomProfile(
-                        myIcon: Icon(Icons.person), myText: "My Account"),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomProfile(
-                        myIcon: Icon(Icons.notification_add),
-                        myText: "Notifications"),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomProfile(
-                        myIcon: Icon(Icons.privacy_tip), myText: "Privacy"),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomProfile(
-                        myIcon: Icon(Icons.account_balance_rounded),
-                        myText: "About"),
-                  ],
+      appBar: AppBar(
+        title: const Text("Your Profile"),
+      ),
+      body: SafeArea(
+        minimum: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CircleAvatar(
+              radius: 80,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.network(
+                  "https://i.pinimg.com/564x/20/05/e2/2005e27a39fa5f6d97b2e0a95233b2be.jpg",
                 ),
               ),
-            ],
-          ),
+            ),
+            const Spacer(),
+
+            const SizedBox(height: 20),
+            Text(
+              "${userController.user.value?.firstname ?? 'James'} ${userController.user.value?.lastname ?? 'Sang'}",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Spacer(),
+
+            ListTile(
+              title: Text(
+                userController.user.value?.id ?? "12",
+              ),
+              leading: const Icon(Icons.person),
+            ),
+            const Divider(),
+
+            const SizedBox(height: 20),
+            ListTile(
+              title: Text(
+                userController.user.value?.email ?? "sang@example.com",
+              ),
+              leading: const Icon(Icons.mail),
+            ),
+            const Divider(),
+            ListTile(
+              title: Text(
+                userController.user.value?.phonenumber ?? "072881818",
+              ),
+              leading: const Icon(Icons.phone),
+            ),
+            const Divider(),
+
+            // ListTile(
+            //   title: Text(
+            //     userController.user.value?.email ?? "sang@example.com",
+            //   ),
+            //   leading: const Icon(Icons.mail),
+            // ),
+            // ListTile(
+            //   title: Text(
+            //     userController.user.value?.email ?? "sang@example.com",
+            //   ),
+            //   leading: const Icon(Icons.mail),
+            // ),
+          ],
         ),
       ),
     );

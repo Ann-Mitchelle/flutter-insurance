@@ -3,6 +3,7 @@
 import 'package:get/get.dart';
 import 'package:insurance/views/dashboard.dart';
 import 'package:insurance/views/enroll.dart';
+import 'package:insurance/views/getproducts.dart';
 import 'package:insurance/views/home.dart';
 import 'package:insurance/views/profile.dart';
 import 'package:insurance/views/reset.dart';
@@ -17,6 +18,6 @@ class Routes {
     GetPage(name: "/Dashboard", page: () => Dashboard()),
     GetPage(name: "/Profile", page: () => ProfilePage()),
     GetPage(name: "/Reset", page: () => Reset()),
-    GetPage(name: "/Enroll", page: () => EnrollmentPage()),
+    GetPage(name: "/Enroll", page: () => MyPackages()),
   ];
 }

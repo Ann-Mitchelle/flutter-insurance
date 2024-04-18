@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:insurance/config/constants.dart';
 import 'package:insurance/controllers/homecontroller.dart';
 import 'package:insurance/views/dashboard.dart';
+import 'package:insurance/views/getproducts.dart';
 import 'package:insurance/views/notifications.dart';
 import 'package:insurance/views/profile.dart';
 import 'package:insurance/views/settings.dart';
@@ -19,6 +20,7 @@ var screens = [
   Notifications(),
   ProfilePage(),
   SettingsPage(),
+  MyPackages(),
 ];
 
 class Home extends StatelessWidget {
@@ -60,7 +62,11 @@ class Home extends StatelessWidget {
               Icon(
                 Icons.settings,
                 color: Colors.white,
-              )
+              ),
+              Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
             ],
             onTap: (index) {
               homeController.updateSelectedPage(index);

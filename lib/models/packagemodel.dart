@@ -9,15 +9,15 @@ class PackageModel {
   var specialist;
   var total;
   PackageModel(
-      {this.id,
-      this.company,
-      this.premium,
-      this.outpatient,
-      this.inpatient,
-      this.dental,
-      this.optical,
-      this.specialist,
-      this.total});
+      {required this.id,
+      required this.company,
+      required this.premium,
+      required this.outpatient,
+      required this.inpatient,
+      required this.dental,
+      required this.optical,
+      required this.specialist,
+      required this.total});
   factory PackageModel.fromJson(Map<String, dynamic> json) {
     return PackageModel(
         id: json['id'],
