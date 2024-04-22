@@ -141,8 +141,8 @@ class signUp extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton(
                               onPressed: () async {
-                                await signup();
-                                Get.toNamed("/");
+                                signup();
+                                // Get.toNamed("/");
                                 print("Jesus is coming...");
                               },
                               child: Text("Sign Up")),

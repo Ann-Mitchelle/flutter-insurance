@@ -95,7 +95,7 @@ class signIn extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             signin();
-                            Get.toNamed("/Home");
+                            //Get.toNamed("/Home");
                           },
                           child: const Text("LOGIN"),
                           style: ElevatedButton.styleFrom(
@@ -161,6 +161,7 @@ class signIn extends StatelessWidget {
       debugPrint("Ok!");
       var serverResponse = json.decode(response.body);
       int loginServer = serverResponse['success'];
+      print(loginServer);
       if (loginServer == 1) {
         Get.offAndToNamed("/Home");
       } else {

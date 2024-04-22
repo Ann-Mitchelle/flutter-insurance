@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insurance/controllers/user_controller.dart';
 
+UserController userController = Get.put(UserController());
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
