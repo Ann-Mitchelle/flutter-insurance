@@ -154,7 +154,7 @@ class signIn extends StatelessWidget {
 
     response = await http.get(
       Uri.parse(
-          'https://sanerylgloann.co.ke/myInsurance/login.php?email=${emailController.text.trim()}&password=${passwordController.text.trim()}'),
+          'https://sanerylgloann.co.ke/myInsurance/login.php?email=${Uri.encodeComponent(emailController.text.trim())}&password=${Uri.encodeComponent(passwordController.text.trim())}'),
     );
     if (response.statusCode == 200) {
       debugPrint(response.body);
