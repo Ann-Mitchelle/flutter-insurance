@@ -141,9 +141,10 @@ class signUp extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton(
                               onPressed: () async {
-                                await signup();
-                                Get.toNamed("/");
-                                print("Jesus is coming...");
+                                final ok = await signup();
+                                if (ok) {
+                                  Get.toNamed("/");
+                                }
                               },
                               child: Text("Sign Up")),
                           /*final buttonStyle styling =  ElevatedButton.styleFrom(
@@ -193,7 +194,7 @@ class signUp extends StatelessWidget {
             )));
   }
 
-  Future<void> signup() async {
+  Future<bool> signup() async {
     var body = {
       'firstname': firstNameController.text.trim(),
       'lastname': lastNameController.text.trim(),
@@ -202,22 +203,19 @@ class signUp extends StatelessWidget {
       'password': passwordController.text.trim(),
     };
 
-    final response = await http.post(
-      Uri.parse('https://sanerylgloann.co.ke/myInsurance/signup.php'),
-      body: body,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    //print(response.body);
-    if (response.statusCode == 200) {
-      var serverResponse = json.decode(response.body);
-      int signedUp = serverResponse['success'];
-      if (signedUp == 1) {
-        Get.offAndToNamed("/homepage");
+    try {
+      final response = await http.post(
+        Uri.parse('https://sanerylgloann.co.ke/myInsurance/signup.php'),
+        body: json.encode(body),
+      );
+      if (response.statusCode == 201) {
+        return true;
       } else {
-        print("Hello");
+        Get.snackbar("Signup Error", "Error sending post");
       }
+    } catch (e) {
+      Get.snackbar("Exception", e.toString());
     }
+    return false;
   }
 }

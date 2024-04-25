@@ -20,10 +20,9 @@ class InsurancePackage {
     this.specialist,
     this.total,
   });
-
   factory InsurancePackage.fromJson(Map<String, dynamic> json) {
     return InsurancePackage(
-      id: json['id'],
+      id: json['package_id'],
       company: json['company'],
       premium: json['premium'] != null ? int.parse(json['premium']) : null,
       outpatient:

@@ -1,5 +1,5 @@
 class User {
-  final String? id;
+  final int? id;
   final String? firstname;
   final String? lastname;
   final String? phonenumber;
@@ -36,7 +36,7 @@ class User {
       id: map['id'],
       firstname: map['firstname'],
       lastname: map['lastname'],
-      phonenumber: map['phonenumber'],
+      phonenumber: map['phonenumber'].toString(),
       email: map['email'],
       password: map['password'],
       createdAt: map['created_at'],

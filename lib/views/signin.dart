@@ -95,11 +95,14 @@ class signIn extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           onPressed: () async {
-                            debugPrint("Here");
-                            await signin(
+                            final ok = await signin(
                               emailController.text,
                               passwordController.text,
                             );
+
+                            if (ok) {
+                              await Get.offAndToNamed("/Home");
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 10, padding: const EdgeInsets.all(15)),
@@ -153,39 +156,29 @@ class signIn extends StatelessWidget {
     );
   }
 
-  Future<void> signin(String email, String password) async {
+  Future<bool> signin(String email, String password) async {
     try {
-      final response = await http.get(
-        Uri.parse(
-          'https://sanerylgloann.co.ke/myInsurance/login.php?email=${email.trim()}&password=${password.trim()}',
-        ),
+      final response = await http.post(
+        Uri.parse("https://sanerylgloann.co.ke/myInsurance/login.php"),
+        body: json.encode({"email": email, "password": password}),
       );
-      if (response.statusCode == 200) {
-        var serverResponse = json.decode(response.body);
-        int loginServer = serverResponse['success'];
-        if (loginServer == 1) {
-          Get.snackbar(
-            "Success",
-            "You were successfully authenticated",
-          );
 
-          final userController = Get.find<UserController>();
-          userController.user.value =
-              User.fromJson(serverResponse["userdata"][0]);
-          Get.offAndToNamed("/Home");
-        } else {
-          Get.snackbar(
-            "Authentication Error",
-            "Please check your email and password and try again",
-          );
-          // Get.snackbar("Error", "An error occured $response.statusCode");
-        }
+      if (response.statusCode == 200) {
+        print(response.body);
+        final userController = Get.find<UserController>();
+        userController.user.value =
+            User.fromJson(json.decode(response.body)["user"]);
+
+        print("ok");
+
+        return true;
+      } else {
+        Get.snackbar(
+            "Authentication error", "Please check your email and password");
       }
     } catch (e) {
-      Get.snackbar(
-        "Exception",
-        "Exception: ${e.toString()}",
-      );
+      Get.snackbar("Exception", e.toString());
     }
+    return false;
   }
 }

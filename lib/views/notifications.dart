@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Notifications extends StatelessWidget {
+
   final List<Map<String, dynamic>> notifications = [
     {
       'message': 'Transaction successful',
@@ -16,25 +17,21 @@ class Notifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Notifications'),
-      ),
-      body: ListView.builder(
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              title: Text(notifications[index]['message']),
-              trailing: Icon(Icons.chevron_right), // Right angle bracket icon
-              onTap: () {
-                print('Notification tapped: ${notifications[index]}');
-              },
-            ),
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            title: Text(notifications[index]['message']),
+            trailing:
+                const Icon(Icons.chevron_right), // Right angle bracket icon
+            onTap: () {
+              print('Notification tapped: ${notifications[index]}');
+            },
+          ),
+        );
+      },
     );
   }
 }
